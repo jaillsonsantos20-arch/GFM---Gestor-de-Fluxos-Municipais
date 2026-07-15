@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  GESTOR
+  OPERADOR_SETOR
+  SECRETARIA
+  FORNECEDOR
+}
+
+enum StatusProcesso {
+  ABERTO
+  EM_ANALISE
+  AJUSTE_SOLICITADO
+  RECEBIDO
+  NOTA_FISCAL_EMITIDA
+  CONCLUIDO
+  INDEFERIDO
+  EMITIR_NOTA
+  PARA_ANALISE
+  CONFERENCIA
+  CONFERIDO
+  CORRECAO
+}
+
+model Secretaria {
+  id        String   @id @default(uuid())
+  nome      String
+  sigla     String
+  createdAt DateTime @default(now())
+
+  setores  Setor[]
+  usuarios Usuario[]
+
+  @@map("secretarias")
+}
+
+model Setor {
+  id           String   @id @default(uuid())
+  nome         String
+  secretariaId String
+  createdAt    DateTime @default(now())
+
+  secretaria        Secretaria           @relation(fields: [secretariaId], references: [id])
+  usuarios          Usuario[]
+  processos         Processo[]           @relation("SetorResponsavel")
+  historicoRecebido HistoricoTramitacao[] @relation("DestinoSetor")
+
+  @@map("setores")
+}
+
+model Fornecedor {
+  id         String   @id @default(uuid())
+  cnpj       String   @unique
+  razaoSocial String
+  contato    String
+  createdAt  DateTime @default(now())
+
+  processos Processo[]
+  usuarios  Usuario[]
+
+  @@map("fornecedores")
+}
+
+model Usuario {
+  id           String   @id @default(uuid())
+  nome         String
+  email        String   @unique
+  senha        String
+  role         Role
+  secretariaId String?
+  setorId      String?
+  fornecedorId String?
+  createdAt    DateTime @default(now())
+
+  secretaria      Secretaria?         @relation(fields: [secretariaId], references: [id])
+  setor           Setor?              @relation(fields: [setorId], references: [id])
+  fornecedor      Fornecedor?         @relation(fields: [fornecedorId], references: [id])
+  processosCriados Processo[]         @relation("CriadorProcesso")
+  historicoEnviado HistoricoTramitacao[] @relation("OrigemUsuario")
+
+  @@map("usuarios")
+}
+
+model ModeloFluxo {
+  id              Int      @id @default(autoincrement())
+  nome            String
+  fluxoSequencial Json
+  createdAt       DateTime @default(now())
+
+  processos Processo[]
+
+  @@map("modelo_fluxos")
+}
+
+model Processo {
+  id                 String         @id @default(uuid())
+  titulo             String
+  descricao          String
+  status             StatusProcesso
+  fornecedorId       String?
+  modeloId           Int?
+  setorResponsavelId String
+  criadoPorId        String
+  anexos             String[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  fornecedor         Fornecedor?    @relation(fields: [fornecedorId], references: [id])
+  modelo             ModeloFluxo?   @relation(fields: [modeloId], references: [id])
+  setorResponsavel   Setor          @relation("SetorResponsavel", fields: [setorResponsavelId], references: [id])
+  criadoPor          Usuario        @relation("CriadorProcesso", fields: [criadoPorId], references: [id])
+  historicos         HistoricoTramitacao[]
+
+  @@map("processos")
+}
+
+model HistoricoTramitacao {
+  id             String         @id @default(uuid())
+  processoId     String
+  origemId       String
+  destinoId      String
+  mensagem       String
+  anexos         String[]
+  statusAlterado StatusProcesso
+  createdAt      DateTime       @default(now())
+
+  processo Processo @relation(fields: [processoId], references: [id])
+  origem   Usuario  @relation("OrigemUsuario", fields: [origemId], references: [id])
+  destino  Setor    @relation("DestinoSetor", fields: [destinoId], references: [id])
+
+  @@map("historico_tramitacoes")
+}

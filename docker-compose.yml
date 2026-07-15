@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: gfm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-gfm@2026}
+    networks:
+      - gfm-net
+
+  backend:
+    build: .
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_started
+    volumes:
+      - uploads:/app/uploads
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-gfm@2026}@postgres:5432/gfm?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      PORT: 3000
+    networks:
+      - gfm-net
+
+  frontend:
+    build: ./frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - gfm-net
+
+volumes:
+  pgdata:
+  uploads:
+
+networks:
+  gfm-net:
