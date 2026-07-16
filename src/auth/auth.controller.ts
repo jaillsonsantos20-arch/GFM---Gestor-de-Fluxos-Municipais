@@ -29,4 +29,10 @@ export class AuthController {
   async me(@CurrentUser() usuario: { id: string }) {
     return this.authService.me(usuario.id);
   }
+
+  @Post('setup')
+  @HttpCode(HttpStatus.OK)
+  async setup() {
+    return this.authService.setup();
+  }
 }

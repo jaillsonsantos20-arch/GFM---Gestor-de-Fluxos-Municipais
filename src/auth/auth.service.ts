@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Role } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -78,6 +79,26 @@ export class AuthService {
     }
 
     return usuario;
+  }
+
+  async setup() {
+    const count = await this.prisma.usuario.count();
+    if (count > 0) {
+      return { message: 'Sistema já configurado' };
+    }
+
+    const senhaHash = await bcrypt.hash('admin123', 10);
+
+    await this.prisma.usuario.create({
+      data: {
+        nome: 'Administrador Geral',
+        email: 'admin@gfm.com',
+        senha: senhaHash,
+        role: Role.GESTOR,
+      },
+    });
+
+    return { message: 'Administrador criado com sucesso', email: 'admin@gfm.com' };
   }
 
   async register(dto: RegisterDto) {
