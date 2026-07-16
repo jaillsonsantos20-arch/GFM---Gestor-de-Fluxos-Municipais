@@ -1,8 +1,14 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/index"
+  "services": {
+    "api": {
+      "api": "api/*.ts",
+      "buildCommand": "npm run build",
+      "rewrites": [
+        {
+          "source": "/(.*)",
+          "destination": "/api/index"
+        }
+      ]
     }
-  ]
+  }
 }
