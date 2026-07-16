@@ -1,4 +1,16 @@
 {
+  "services": {
+    "web": {
+      "root": ".",
+      "entrypoint": "api/index.ts",
+      "framework": "nestjs",
+      "buildCommand": "npm run build"
+    },
+    "frontend": {
+      "root": "frontend",
+      "framework": "vite"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
