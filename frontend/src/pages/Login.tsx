@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import api from '../services/api';
 
 export default function Login() {
   const { login } = useAuth();
@@ -8,11 +9,14 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState('');
   const [loading, setLoading] = useState(false);
+  const [setupLoading, setSetupLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro('');
+    setSucesso('');
     setLoading(true);
     try {
       await login(email, senha);
@@ -21,6 +25,20 @@ export default function Login() {
       setErro(err.response?.data?.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSetup = async () => {
+    setErro('');
+    setSucesso('');
+    setSetupLoading(true);
+    try {
+      const res = await api.post('/auth/setup');
+      setSucesso(res.data.message + (res.data.email ? ` (${res.data.email})` : ''));
+    } catch (err: any) {
+      setErro(err.response?.data?.message || 'Erro ao configurar sistema');
+    } finally {
+      setSetupLoading(false);
     }
   };
 
@@ -51,6 +69,10 @@ export default function Login() {
 
           {erro && (
             <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg mb-4">{erro}</div>
+          )}
+
+          {sucesso && (
+            <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg mb-4">{sucesso}</div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -85,7 +107,18 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-100">
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={handleSetup}
+              disabled={setupLoading}
+              className="text-sm text-bank-600 hover:text-bank-800 font-medium"
+            >
+              {setupLoading ? 'Configurando...' : 'Primeiro acesso? Configurar sistema'}
+            </button>
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
             <p className="text-xs font-medium text-gray-500 mb-2">Credenciais de teste:</p>
             <div className="space-y-1.5">
               <p className="text-xs text-gray-400"><span className="font-mono text-gray-600">admin@gfm.com</span> / <span className="font-mono text-gray-600">admin123</span></p>
