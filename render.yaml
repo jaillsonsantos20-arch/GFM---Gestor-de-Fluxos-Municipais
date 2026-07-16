@@ -10,7 +10,9 @@ services:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
-        value: postgresql://postgres:SvtTzYwUrtxwxAYb@db.cweuhfocjznrbxrqdgjx.supabase.co:5432/postgres?schema=public&sslmode=require
+        value: postgresql://neondb_owner:npg_jJxuq6CibNQ0@ep-wandering-frog-aw7wigkj.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: PRISMA_GENERATE_NO_CACHE
+        value: "true"
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
