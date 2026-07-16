@@ -1,16 +1,8 @@
 {
-  "name": "gfm-backend",
-  "services": {
-    "api": {
-      "root": ".",
-      "api": "api/*.ts",
-      "buildCommand": "npm run build",
-      "rewrites": [
-        {
-          "source": "/(.*)",
-          "destination": "/api/index"
-        }
-      ]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
     }
-  }
+  ]
 }
