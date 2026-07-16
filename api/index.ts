@@ -6,7 +6,7 @@ import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { Role } from '../src/auth/enums/role.enum';
+import { Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 let cachedHandler;

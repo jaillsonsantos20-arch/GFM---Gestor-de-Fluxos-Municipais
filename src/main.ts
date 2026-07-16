@@ -5,7 +5,7 @@ import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
-import { Role } from './auth/enums/role.enum';
+import { Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 async function bootstrap() {
