@@ -1,12 +1,15 @@
+import serverless from 'serverless-http';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
-import { AppModule } from './app.module';
-import { PrismaService } from './prisma/prisma.service';
-import { Role } from './auth/enums/role.enum';
+import { AppModule } from '../src/app.module';
+import { PrismaService } from '../src/prisma/prisma.service';
+import { Role } from '../src/auth/enums/role.enum';
 import * as bcrypt from 'bcrypt';
+
+let cachedHandler;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -39,12 +42,15 @@ async function bootstrap() {
         role: Role.GESTOR,
       },
     });
-    console.log('Admin criado: admin@gfm.com / admin123');
   }
 
-  const port = process.env.PORT || 3000;
-  await app.listen(port, '0.0.0.0');
-  console.log(`Server running on port ${port}`);
+  await app.init();
+  return app.getHttpAdapter().getInstance();
 }
 
-bootstrap();
+export const handler = serverless(async (req, res) => {
+  if (!cachedHandler) {
+    cachedHandler = await bootstrap();
+  }
+  cachedHandler(req, res);
+});
