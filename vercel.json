@@ -1,8 +1,7 @@
 {
   "functions": {
-    "api/index.js": {
-      "memory": 512,
-      "maxDuration": 30
+    "api/index.ts": {
+      "runtime": "@vercel/node@3"
     }
   }
 }

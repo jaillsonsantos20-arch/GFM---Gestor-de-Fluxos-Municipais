@@ -1,12 +1,12 @@
-const serverless = require('serverless-http');
-const { NestFactory } = require('@nestjs/core');
-const { ValidationPipe } = require('@nestjs/common');
-const { join } = require('path');
-const { existsSync, mkdirSync } = require('fs');
-const { AppModule } = require('../dist/src/app.module');
-const { PrismaService } = require('../dist/src/prisma/prisma.service');
-const { Role } = require('@prisma/client');
-const bcrypt = require('bcrypt');
+import serverless from 'serverless-http';
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
+import { existsSync, mkdirSync } from 'fs';
+import { AppModule } from '../src/app.module';
+import { PrismaService } from '../src/prisma/prisma.service';
+import { Role } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 let cachedHandler;
 
@@ -51,7 +51,7 @@ async function bootstrap() {
   return app.getHttpAdapter().getInstance();
 }
 
-module.exports.handler = serverless(async (req, res) => {
+export const handler = serverless(async (req, res) => {
   if (!cachedHandler) {
     cachedHandler = await bootstrap();
   }
