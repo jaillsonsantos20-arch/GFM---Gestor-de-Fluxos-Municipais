@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/diag", "destination": "/api/diag" },
+    { "source": "/(.*)", "destination": "/api/diag" }
+  ]
+}
