@@ -21,16 +21,12 @@ services:
   - type: web
     name: gfm-frontend
     env: static
-    region: sao-paulo
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: gfm-backend
-          property: url
+        value: https://gfm-backend.onrender.com
 
 databases:
   - name: gfm-db
