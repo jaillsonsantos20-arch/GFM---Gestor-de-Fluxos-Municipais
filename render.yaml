@@ -10,9 +10,7 @@ services:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
-        fromDatabase:
-          name: gfm-db
-          property: connectionString
+        value: postgresql://neondb_owner:npg_jJxuq6CibNQ0@ep-wandering-frog-aw7wigkj.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
@@ -28,9 +26,3 @@ services:
       - key: VITE_API_URL
         value: https://gfm-backend.onrender.com
 
-databases:
-  - name: gfm-db
-    region: virginia
-    plan: free
-    databaseName: gfm
-    ipAllowList: []
