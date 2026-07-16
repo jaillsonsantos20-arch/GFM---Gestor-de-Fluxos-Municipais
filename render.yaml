@@ -10,7 +10,7 @@ services:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
-        value: postgresql://postgres:SvtTzYwUrtxwxAYb@db.cweuhfocjznrbxrqdgjx.supabase.co:5432/postgres?schema=public
+        value: postgresql://postgres:SvtTzYwUrtxwxAYb@db.cweuhfocjznrbxrqdgjx.supabase.co:5432/postgres?schema=public&sslmode=require
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
