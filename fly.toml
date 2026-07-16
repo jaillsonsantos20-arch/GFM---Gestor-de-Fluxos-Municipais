@@ -1,0 +1,14 @@
+app = "gfm-backend"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  DATABASE_URL = "postgresql://neondb_owner:npg_jJxuq6CibNQ0@ep-wandering-frog-aw7wigkj.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
