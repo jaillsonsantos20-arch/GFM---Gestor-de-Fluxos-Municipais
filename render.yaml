@@ -2,7 +2,7 @@ services:
   - type: web
     name: gfm-backend
     env: node
-    region: sao
+    region: virginia
     plan: free
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npx prisma migrate deploy && node dist/src/main.js
@@ -30,7 +30,7 @@ services:
 
 databases:
   - name: gfm-db
-    region: sao
+    region: virginia
     plan: free
     databaseName: gfm
     ipAllowList: []
