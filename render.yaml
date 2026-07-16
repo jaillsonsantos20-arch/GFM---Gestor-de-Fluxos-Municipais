@@ -10,19 +10,10 @@ services:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
-        value: postgresql://neondb_owner:npg_jJxuq6CibNQ0@ep-wandering-frog-aw7wigkj.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require
+        value: postgresql://postgres:SvtTzYwUrtxwxAYb@db.cweuhfocjznrbxrqdgjx.supabase.co:5432/postgres?schema=public
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: 8h
 
-  - type: web
-    name: gfm-frontend
-    env: static
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://gfm-backend.onrender.com
 
