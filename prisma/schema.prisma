@@ -1,11 +1,12 @@
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -48,20 +49,20 @@ model Setor {
   secretariaId String
   createdAt    DateTime @default(now())
 
-  secretaria        Secretaria           @relation(fields: [secretariaId], references: [id])
+  secretaria        Secretaria            @relation(fields: [secretariaId], references: [id])
   usuarios          Usuario[]
-  processos         Processo[]           @relation("SetorResponsavel")
+  processos         Processo[]            @relation("SetorResponsavel")
   historicoRecebido HistoricoTramitacao[] @relation("DestinoSetor")
 
   @@map("setores")
 }
 
 model Fornecedor {
-  id         String   @id @default(uuid())
-  cnpj       String   @unique
+  id          String   @id @default(uuid())
+  cnpj        String   @unique
   razaoSocial String
-  contato    String
-  createdAt  DateTime @default(now())
+  contato     String
+  createdAt   DateTime @default(now())
 
   processos Processo[]
   usuarios  Usuario[]
@@ -80,10 +81,10 @@ model Usuario {
   fornecedorId String?
   createdAt    DateTime @default(now())
 
-  secretaria      Secretaria?         @relation(fields: [secretariaId], references: [id])
-  setor           Setor?              @relation(fields: [setorId], references: [id])
-  fornecedor      Fornecedor?         @relation(fields: [fornecedorId], references: [id])
-  processosCriados Processo[]         @relation("CriadorProcesso")
+  secretaria       Secretaria?           @relation(fields: [secretariaId], references: [id])
+  setor            Setor?                @relation(fields: [setorId], references: [id])
+  fornecedor       Fornecedor?           @relation(fields: [fornecedorId], references: [id])
+  processosCriados Processo[]            @relation("CriadorProcesso")
   historicoEnviado HistoricoTramitacao[] @relation("OrigemUsuario")
 
   @@map("usuarios")
@@ -113,11 +114,11 @@ model Processo {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 
-  fornecedor         Fornecedor?    @relation(fields: [fornecedorId], references: [id])
-  modelo             ModeloFluxo?   @relation(fields: [modeloId], references: [id])
-  setorResponsavel   Setor          @relation("SetorResponsavel", fields: [setorResponsavelId], references: [id])
-  criadoPor          Usuario        @relation("CriadorProcesso", fields: [criadoPorId], references: [id])
-  historicos         HistoricoTramitacao[]
+  fornecedor       Fornecedor?           @relation(fields: [fornecedorId], references: [id])
+  modelo           ModeloFluxo?          @relation(fields: [modeloId], references: [id])
+  setorResponsavel Setor                 @relation("SetorResponsavel", fields: [setorResponsavelId], references: [id])
+  criadoPor        Usuario               @relation("CriadorProcesso", fields: [criadoPorId], references: [id])
+  historicos       HistoricoTramitacao[]
 
   @@map("processos")
 }
