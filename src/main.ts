@@ -1,21 +1,24 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { Module, Controller, Get } from '@nestjs/common';
-
-@Controller()
-class HealthController {
-  @Get()
-  health() {
-    return { status: 'ok' };
-  }
-}
-
-@Module({
-  controllers: [HealthController],
-})
-class SimpleModule {}
+import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(SimpleModule);
+  const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: process.env.FRONTEND_URL || true,
+    credentials: true,
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
+
   await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();
