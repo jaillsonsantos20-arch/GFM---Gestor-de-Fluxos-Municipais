@@ -4,8 +4,8 @@
       "maxDuration": 30
     }
   },
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist",
+  "buildCommand": "cd frontend && npm ci && npm run build && cd .. && mkdir -p public && cp -r frontend/dist/* public/",
+  "outputDirectory": "public",
   "rewrites": [
     {
       "source": "/api/(.*)",
