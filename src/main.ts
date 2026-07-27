@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { join } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync } from 'fs';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
 import { Role } from '@prisma/client';
@@ -18,17 +18,11 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const uploadsDir = join(process.cwd(), 'uploads');
-  if (!existsSync(uploadsDir)) {
-    mkdirSync(uploadsDir, { recursive: true });
-  }
-  app.useStaticAssets(uploadsDir, { prefix: '/uploads' });
-
   const frontendDir = join(process.cwd(), 'frontend', 'dist');
   if (existsSync(frontendDir)) {
     app.useStaticAssets(frontendDir);
     app.getHttpAdapter().get('*', (req: Request, res: Response) => {
-      if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+      if (!req.path.startsWith('/api')) {
         res.sendFile(join(frontendDir, 'index.html'));
       }
     });
