@@ -4,7 +4,6 @@
       "maxDuration": 30
     }
   },
-  "buildCommand": "cd frontend && npm install && npm run build && cd .. && npm install && npx prisma generate",
   "rewrites": [
     {
       "source": "/api/(.*)",
