@@ -13,6 +13,10 @@ export class UpdateProcessoDto {
   @IsOptional()
   fornecedorId?: string;
 
+  @IsUUID()
+  @IsOptional()
+  secretariaId?: string;
+
   @IsInt()
   @IsOptional()
   modeloId?: number;

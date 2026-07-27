@@ -19,6 +19,10 @@ export class CreateProcessoDto {
 
   @IsUUID()
   @IsOptional()
+  secretariaId?: string;
+
+  @IsUUID()
+  @IsOptional()
   setorId?: string;
 
   @IsArray()

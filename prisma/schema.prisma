@@ -37,8 +37,9 @@ model Secretaria {
   sigla     String
   createdAt DateTime @default(now())
 
-  setores  Setor[]
-  usuarios Usuario[]
+  setores   Setor[]
+  usuarios   Usuario[]
+  processos Processo[]
 
   @@map("secretarias")
 }
@@ -108,6 +109,7 @@ model Processo {
   status             StatusProcesso
   fornecedorId       String?
   modeloId           Int?
+  secretariaId       String?
   setorResponsavelId String
   criadoPorId        String
   anexos             String[]
@@ -116,6 +118,7 @@ model Processo {
 
   fornecedor       Fornecedor?           @relation(fields: [fornecedorId], references: [id])
   modelo           ModeloFluxo?          @relation(fields: [modeloId], references: [id])
+  secretaria       Secretaria?           @relation(fields: [secretariaId], references: [id])
   setorResponsavel Setor                 @relation("SetorResponsavel", fields: [setorResponsavelId], references: [id])
   criadoPor        Usuario               @relation("CriadorProcesso", fields: [criadoPorId], references: [id])
   historicos       HistoricoTramitacao[]

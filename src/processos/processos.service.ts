@@ -60,6 +60,7 @@ export class ProcessosService {
           status: 'ABERTO',
           fornecedorId: dto.fornecedorId,
           modeloId: dto.modeloId,
+          secretariaId: dto.secretariaId || setor.secretariaId,
           setorResponsavelId,
           criadoPorId: usuarioId,
           anexos: dto.anexos || [],
