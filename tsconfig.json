@@ -22,5 +22,6 @@
       "@auth/*": ["src/auth/*"],
       "@cadastros/*": ["src/cadastros/*"]
     }
-  }
+  },
+  "exclude": ["prisma/api", "node_modules", "dist"]
 }
