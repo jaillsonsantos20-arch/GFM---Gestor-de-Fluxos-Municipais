@@ -13,6 +13,8 @@ let cachedApp: any;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.setGlobalPrefix('api');
+
   app.enableCors({
     origin: process.env.FRONTEND_URL || true,
     credentials: true,
