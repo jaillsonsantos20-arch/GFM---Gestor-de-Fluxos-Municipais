@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { Request, Response } from 'express';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { AppModule } from './app.module';
@@ -28,7 +29,7 @@ async function bootstrap() {
   );
 
   // Diagnostic endpoint
-  app.getHttpAdapter().get('/health/diagnostic', async (req, res) => {
+  app.getHttpAdapter().get('/health/diagnostic', async (req: Request, res: Response) => {
     const results: any = {};
 
     // Test Prisma

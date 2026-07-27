@@ -13,18 +13,24 @@ export default function ProcessoNovo() {
   const [setorId, setSetorId] = useState('');
   const [fornecedores, setFornecedores] = useState<any[]>([]);
   const [modelos, setModelos] = useState<any[]>([]);
+  const [secretarias, setSecretarias] = useState<any[]>([]);
+  const [secretariaId, setSecretariaId] = useState('');
   const [setores, setSetores] = useState<any[]>([]);
   const [arquivos, setArquivos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const setoresFiltrados = setores.filter((s) => s.secretariaId === secretariaId);
 
   useEffect(() => {
     Promise.all([
       api.get('/fornecedores'),
       api.get('/modelos-fluxo'),
+      api.get('/secretarias'),
       api.get('/setores'),
-    ]).then(([f, m, s]) => {
+    ]).then(([f, m, sec, s]) => {
       setFornecedores(f.data);
       setModelos(m.data);
+      setSecretarias(sec.data);
       setSetores(s.data);
     }).catch(() => {});
   }, []);
@@ -99,13 +105,22 @@ export default function ProcessoNovo() {
             </select>
           </div>
           {!modeloId && !usuario?.setorId && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Setor Responsável *</label>
-              <select value={setorId} onChange={(e) => setSetorId(e.target.value)} className="select">
-                <option value="">Selecione um setor...</option>
-                {setores.map((s) => <option key={s.id} value={s.id}>{s.nome} ({s.secretaria?.sigla})</option>)}
-              </select>
-            </div>
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Secretaria</label>
+                <select value={secretariaId} onChange={(e) => { setSecretariaId(e.target.value); setSetorId(''); }} className="select">
+                  <option value="">Selecione uma secretaria...</option>
+                  {secretarias.map((s) => <option key={s.id} value={s.id}>{s.nome} ({s.sigla})</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Setor Responsável *</label>
+                <select value={setorId} onChange={(e) => setSetorId(e.target.value)} className="select">
+                  <option value="">Selecione um setor...</option>
+                  {setoresFiltrados.map((s) => <option key={s.id} value={s.id}>{s.nome}</option>)}
+                </select>
+              </div>
+            </>
           )}
         </div>
         <div>
