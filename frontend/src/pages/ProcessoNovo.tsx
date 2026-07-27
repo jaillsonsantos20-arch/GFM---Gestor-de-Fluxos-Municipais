@@ -104,7 +104,7 @@ export default function ProcessoNovo() {
               {modelos.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
             </select>
           </div>
-          {!modeloId && !usuario?.setorId && (
+          {!modeloId && (
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Secretaria</label>
@@ -114,9 +114,9 @@ export default function ProcessoNovo() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Setor Responsável *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Setor Responsável {!usuario?.setorId ? '*' : ''}</label>
                 <select value={setorId} onChange={(e) => setSetorId(e.target.value)} className="select">
-                  <option value="">Selecione um setor...</option>
+                  <option value="">{usuario?.setorId ? 'Manter meu setor atual' : 'Selecione um setor...'}</option>
                   {setoresFiltrados.map((s) => <option key={s.id} value={s.id}>{s.nome}</option>)}
                 </select>
               </div>
