@@ -24,6 +24,16 @@ async function bootstrap() {
   }
   app.useStaticAssets(uploadsDir, { prefix: '/uploads' });
 
+  const frontendDir = join(process.cwd(), 'frontend', 'dist');
+  if (existsSync(frontendDir)) {
+    app.useStaticAssets(frontendDir);
+    app.getHttpAdapter().get('*', (req: Request, res: Response) => {
+      if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+        res.sendFile(join(frontendDir, 'index.html'));
+      }
+    });
+  }
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
