@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -12,7 +13,10 @@ import * as bcrypt from 'bcryptjs';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.enableCors();
+  app.enableCors({
+    origin: process.env.FRONTEND_URL || true,
+    credentials: true,
+  });
 
   const uploadsDir = join(process.cwd(), 'uploads');
   if (!existsSync(uploadsDir)) {
